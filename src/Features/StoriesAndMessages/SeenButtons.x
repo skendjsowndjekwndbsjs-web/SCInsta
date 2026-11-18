@@ -42,9 +42,13 @@
 %new - (void)seenButtonHandler:(UIBarButtonItem *)sender {
     UIViewController *nearestVC = [SCIUtils nearestViewControllerForView:self];
     if ([nearestVC isKindOfClass:%c(IGDirectThreadViewController)]) {
-        [(IGDirectThreadViewController *)nearestVC markLastMessageAsSeen];
+        if ([nearestVC respondsToSelector:@selector(markLastMessageAsSeen)]) {
+            [(IGDirectThreadViewController *)nearestVC markLastMessageAsSeen];
 
-        [SCIUtils showToastForDuration:2.5 title:@"Marked messages as seen"];
+            [SCIUtils showToastForDuration:2.5 title:@"Marked messages as seen"];
+        } else {
+            [SCIUtils showToastForDuration:2.5 title:@"Not supported on this Instagram version"];
+        }
     }
 }
 // DM visual messages viewed button
